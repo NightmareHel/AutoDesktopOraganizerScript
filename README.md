@@ -1,2 +1,139 @@
-# AutoDesktopOraganizerScript
-This Python script automatically organizes files placed on your Desktop into categorized folders (e.g. Documents, Images, Videos, Audio, Archives, Others). It runs silently in the background, detects new files in real time, and moves them to their appropriate folders. Optional Windows notifications appear whenever files are moved.
+🧩 Overview
+
+This Python script automatically organizes files placed on your Desktop into categorized folders (e.g. Documents, Images, Videos, Audio, Archives, Others).
+It runs silently in the background, detects new files in real time, and moves them to their appropriate folders.
+Optional Windows notifications appear whenever files are moved.
+
+⚙️ Features
+
+Real-time monitoring of your Desktop folder
+
+Auto-sorting based on file extensions
+
+Startup notifications and toast popups (win10toast)
+
+Always-on background operation via .bat or Task Scheduler
+
+Fully configurable categories via config.json
+
+🧠 Requirements
+
+Python 3.10 or higher
+
+Pip installed
+
+Windows 10 or later
+
+📦 Install Dependencies
+
+Open a terminal in the project folder and run:
+
+pip install -r requirements.txt
+
+
+If you don’t have a requirements file yet, manually install the core libraries:
+
+pip install watchdog win10toast
+
+🗂 Project Structure
+Desktop File Organizer/
+├── desktop_organizer_live.py      # main automation script
+├── config.json                    # user-defined categories and paths
+├── requirements.txt               # dependency list
+├── start_desktop_organizer.bat    # optional auto-start launcher
+└── Organized/                     # generated destination folders
+
+⚙️ Configuration
+
+Edit config.json to customize paths and categories:
+
+{
+  "desktop_path": "C:\\Users\\likea\\Desktop",
+  "organized_dir": "C:\\Users\\likea\\Desktop\\Organized",
+  "categories": {
+    "Documents": [".pdf", ".docx", ".txt", ".xlsx", ".pptx"],
+    "Images": [".jpg", ".jpeg", ".png", ".gif", ".heic"],
+    "Videos": [".mp4", ".mov", ".avi", ".mkv"],
+    "Audio": [".mp3", ".wav", ".m4a"],
+    "Archives": [".zip", ".rar", ".7z"],
+    "Installers": [".exe", ".msi"]
+  }
+}
+
+▶️ Run the Script Manually
+
+In VS Code Terminal or CMD:
+
+python desktop_organizer_live.py
+
+
+You’ll see:
+
+🧠 Desktop Organizer is running... (Press Ctrl+C to stop)
+
+
+Then drop a file on your Desktop — it should auto-move to the correct folder under Organized/.
+
+🔁 Run Automatically on Startup
+🪄 Option 1 — Startup Folder
+
+Press Win + R, type shell:startup, press Enter.
+
+Create a file named:
+
+start_desktop_organizer.bat
+
+
+Add this line inside:
+
+pythonw "C:\Users\likea\Desktop\desktop_organizer_live.py"
+
+
+Save and close.
+It will now start silently whenever you log in.
+
+🪄 Option 2 — Task Scheduler
+
+Open Task Scheduler → Create Basic Task.
+
+Name: Desktop File Organizer.
+
+Trigger: When I log on.
+
+Action: Start a program
+
+Program/script: pythonw
+
+Add arguments: "C:\Users\likea\Desktop\desktop_organizer_live.py"
+
+Finish. ✅
+
+🧠 Useful Commands
+Action	Command
+Run manually	python desktop_organizer_live.py
+Stop background version	taskkill /f /im pythonw.exe
+Reinstall dependencies	pip install -r requirements.txt --upgrade
+Create virtual environment (optional)	python -m venv venv && venv\Scripts\activate
+List installed packages	pip freeze
+📋 Logs
+
+Every file moved is recorded in:
+
+C:\Users\<username>\Desktop\Organized\organizer.log
+
+
+Each entry includes a timestamp, filename, and destination folder.
+
+🧠 Known Issues
+
+If Windows toast notifications cause WNDPROC or WPARAM errors, wrap toaster.show_toast(...) in a try/except block.
+
+Make sure the Desktop path in config.json uses double backslashes (\\).
+
+💡 Planned Upgrades
+
+Config live-reload support
+
+Pause/Resume via tray icon
+
+Cross-platform notifications (macOS/Linux via plyer)
